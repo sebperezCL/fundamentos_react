@@ -9,24 +9,22 @@ import { login } from '../../api/auth';
 import './LoginPage.css';
 
 import { AuthContextConsumer } from '../auth/context';
+import useForm from '../hooks/useForms';
 
 function LoginPage({ onLogin, history }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [form, handleFormChange] = useForm({ email: '', password: '' });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
-
-  const handleEmailChange = (event) => setEmail(event.target.value);
-  const handlePasswordChange = (event) => setPassword(event.target.value);
+  const { email, password } = form;
 
   const handleSubmit = async (event) => {
-    const credentials = { email, password };
+    const credentials = form;
     event.preventDefault();
     setSubmitting(true);
     try {
       const loggedUserId = await login(credentials);
       setError(null);
-      onLogin(loggedUserId, () => history.push('/tweet'));
+      onLogin(loggedUserId).then(history.push('/tweet'));
     } catch (error) {
       setError(error);
     } finally {
@@ -48,7 +46,7 @@ function LoginPage({ onLogin, history }) {
           label="phone, email or username"
           className="loginPage-field"
           value={email}
-          onChange={handleEmailChange}
+          onChange={handleFormChange}
         />
         <FormField
           type="password"
@@ -56,7 +54,7 @@ function LoginPage({ onLogin, history }) {
           label="password"
           className="loginPage-field"
           value={password}
-          onChange={handlePasswordChange}
+          onChange={handleFormChange}
         />
         <Button
           type="submit"
