@@ -11,3 +11,8 @@ export const getTweetDetail = (tweetId) => {
   const url = `${tweetsBaseUrl}/tweets/${tweetId}`;
   return client.get(url);
 };
+
+export const createTweet = (tweet) => {
+  const url = `${tweetsBaseUrl}/tweets`;
+  return client.post(url, tweet);
+};

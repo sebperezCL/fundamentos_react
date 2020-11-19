@@ -1,6 +1,7 @@
 {
   "env": {
     "browser": true,
+    "node": true,
     "es2021": true
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
@@ -14,7 +15,8 @@
   "plugins": ["react"],
   "rules": {
     "react/prop-types": "off",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "react/display-name": "off"
   },
   "parser": "babel-eslint"
 }

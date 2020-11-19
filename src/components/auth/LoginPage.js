@@ -1,5 +1,6 @@
 import React from 'react';
 import T from 'prop-types';
+import ReactDOM from 'react-dom';
 
 import Button from '../shared/Button';
 import FormField from '../shared/FormField';
@@ -54,7 +55,7 @@ class LoginPage extends React.Component {
       error,
     } = this.state;
 
-    return (
+    return ReactDOM.createPortal(
       <div className="loginPage">
         <h1 className="loginPage-title">Log in to Twitter</h1>
         <form onSubmit={this.handleSubmit}>
@@ -65,7 +66,6 @@ class LoginPage extends React.Component {
             className="loginPage-field"
             value={email}
             onChange={this.handleChange}
-            focus="true"
           />
           <FormField
             type="password"
@@ -85,7 +85,8 @@ class LoginPage extends React.Component {
           </Button>
         </form>
         {error && <div className="loginPage-error">{error.message}</div>}
-      </div>
+      </div>,
+      document.getElementById('portal')
     );
   }
 }
