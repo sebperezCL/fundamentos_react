@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import T from 'prop-types';
-import ReactDOM from 'react-dom';
 
 import Button from '../shared/Button';
 import FormField from '../shared/FormField';
@@ -11,84 +10,66 @@ import './LoginPage.css';
 
 import { AuthContextConsumer } from '../auth/context';
 
-class LoginPage extends React.Component {
-  state = {
-    form: {
-      email: '',
-      password: '',
-    },
-    submitting: false,
-    error: null,
-  };
+function LoginPage({ onLogin, history }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
-  handleChange = (event) => {
-    this.setState((state) => ({
-      form: { ...state.form, [event.target.name]: event.target.value },
-    }));
-  };
+  const handleEmailChange = (event) => setEmail(event.target.value);
+  const handlePasswordChange = (event) => setPassword(event.target.value);
 
-  handleSubmit = async (event) => {
-    const { onLogin, history } = this.props;
-    const { form: credentials } = this.state;
+  const handleSubmit = async (event) => {
+    const credentials = { email, password };
     event.preventDefault();
-    this.setState({ submitting: true });
+    setSubmitting(true);
     try {
       const loggedUserId = await login(credentials);
-      this.setState({ submitting: false, error: null });
+      setError(null);
       onLogin(loggedUserId, () => history.push('/tweet'));
     } catch (error) {
-      this.setState({ submitting: false, error: error });
+      setError(error);
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  canSubmit = () => {
-    const {
-      form: { email, password },
-      submitting,
-    } = this.state;
+  const canSubmit = () => {
     return !submitting && email && password;
   };
 
-  render() {
-    const {
-      form: { email, password },
-      error,
-    } = this.state;
-
-    return ReactDOM.createPortal(
-      <div className="loginPage">
-        <h1 className="loginPage-title">Log in to Twitter</h1>
-        <form onSubmit={this.handleSubmit}>
-          <FormField
-            type="text"
-            name="email"
-            label="phone, email or username"
-            className="loginPage-field"
-            value={email}
-            onChange={this.handleChange}
-          />
-          <FormField
-            type="password"
-            name="password"
-            label="password"
-            className="loginPage-field"
-            value={password}
-            onChange={this.handleChange}
-          />
-          <Button
-            type="submit"
-            className="loginPage-submit"
-            variant="primary"
-            disabled={!this.canSubmit()}
-          >
-            Log in
-          </Button>
-        </form>
-        {error && <div className="loginPage-error">{error.message}</div>}
-      </div>,
-      document.getElementById('portal')
-    );
-  }
+  return (
+    <div className="loginPage">
+      <h1 className="loginPage-title">Log in to Twitter</h1>
+      <form onSubmit={handleSubmit}>
+        <FormField
+          type="text"
+          name="email"
+          label="phone, email or username"
+          className="loginPage-field"
+          value={email}
+          onChange={handleEmailChange}
+        />
+        <FormField
+          type="password"
+          name="password"
+          label="password"
+          className="loginPage-field"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+        <Button
+          type="submit"
+          className="loginPage-submit"
+          variant="primary"
+          disabled={!canSubmit()}
+        >
+          Log in
+        </Button>
+      </form>
+      {error && <div className="loginPage-error">{error.message}</div>}
+    </div>
+  );
 }
 
 LoginPage.propTypes = {
