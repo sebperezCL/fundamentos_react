@@ -40,13 +40,8 @@ class TweetsPage extends React.Component {
   };
 
   render() {
-    const { isLogged, onLogout } = this.props;
     return (
-      <Layout
-        title="What's going on..."
-        isLogged={isLogged}
-        onLogout={onLogout}
-      >
+      <Layout title="What's going on...">
         <div className="tweetsPage">{this.renderContent()}</div>
       </Layout>
     );

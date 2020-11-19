@@ -7,10 +7,7 @@ import T from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import NewTweetPage from '../tweets/newTweetPage';
 import PrivateRoute from '../auth/PrivateRoute';
-
-const AuthContext = React.createContext();
-
-console.log(AuthContext);
+import { AuthContextProvider } from '../auth/context';
 
 class App extends React.Component {
   state = {
@@ -24,7 +21,7 @@ class App extends React.Component {
   render() {
     const { loggedUserId } = this.state;
     return (
-      <AuthContext.Provider
+      <AuthContextProvider
         value={{
           isLogged: !!loggedUserId,
           onLogin: this.handleLogin,
@@ -34,15 +31,9 @@ class App extends React.Component {
         <div className="App">
           <Switch>
             <Route path="/" exact>
-              {({ history }) => (
-                <TweetsPage
-                  isLogged={!!loggedUserId}
-                  onLogout={this.handleLogout}
-                  history={history}
-                />
-              )}
+              {({ history }) => <TweetsPage history={history} />}
             </Route>
-            <PrivateRoute path="/tweet" exact isLogged={!!loggedUserId}>
+            <PrivateRoute path="/tweet" exact>
               <NewTweetPage />
             </PrivateRoute>
             <Route path="/tweet/:tweetid" exact component={TweetPage} />
@@ -67,7 +58,7 @@ class App extends React.Component {
             </Route>
           </Switch>
         </div>
-      </AuthContext.Provider>
+      </AuthContextProvider>
     );
   }
 }

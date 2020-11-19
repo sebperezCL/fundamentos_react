@@ -8,6 +8,8 @@ import { ReactComponent as Icon } from '../../assets/twitter.svg';
 import './Header.css';
 import Button from '../shared/Button';
 
+import { AuthContextConsumer } from '../auth/context';
+
 const Header = ({ className, isLogged, onLogout, ...props }) => (
   <header className={classNames('header', className)} {...props}>
     <Link to="/">
@@ -35,4 +37,12 @@ const Header = ({ className, isLogged, onLogout, ...props }) => (
   </header>
 );
 
-export default Header;
+const ConnectedToAuthHeader = (props) => (
+  <AuthContextConsumer>
+    {({ isLogged, onLogout }) => (
+      <Header {...props} isLogged={isLogged} onLogout={onLogout} />
+    )}
+  </AuthContextConsumer>
+);
+
+export default ConnectedToAuthHeader;
