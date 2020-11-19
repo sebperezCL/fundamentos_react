@@ -5,10 +5,10 @@ import { AuthContextConsumer } from './context';
 const PrivateRoute = ({ isLogged, ...props }) =>
   isLogged ? <Route {...props} /> : <Redirect to="/login" />;
 
-export const ConnectedToAuthHeaderPrivateRoute = (props) => (
+export const ConnectedToAuthPrivateRoute = (props) => (
   <AuthContextConsumer>
     {(value) => <PrivateRoute {...props} isLogged={value.isLogged} />}
   </AuthContextConsumer>
 );
 
-export default ConnectedToAuthHeaderPrivateRoute;
+export default ConnectedToAuthPrivateRoute;

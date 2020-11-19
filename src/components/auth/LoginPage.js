@@ -8,6 +8,8 @@ import { login } from '../../api/auth';
 
 import './LoginPage.css';
 
+import { AuthContextConsumer } from '../auth/context';
+
 class LoginPage extends React.Component {
   state = {
     form: {
@@ -92,4 +94,12 @@ LoginPage.propTypes = {
   onLogin: T.func.isRequired,
 };
 
-export default LoginPage;
+const ConnectedToAuthLogin = (props) => (
+  <AuthContextConsumer>
+    {({ isLogged, onLogin }) => (
+      <LoginPage {...props} isLogged={isLogged} onLogin={onLogin} />
+    )}
+  </AuthContextConsumer>
+);
+
+export default ConnectedToAuthLogin;

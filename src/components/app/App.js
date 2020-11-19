@@ -5,7 +5,7 @@ import TweetPage from '../tweets/TweetPage';
 
 import T from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import NewTweetPage from '../tweets/newTweetPage';
+import NewTweetPage from '../tweets/NewTweetPage';
 import PrivateRoute from '../auth/PrivateRoute';
 import { AuthContextProvider } from '../auth/context';
 
@@ -39,7 +39,7 @@ class App extends React.Component {
             <Route path="/tweet/:tweetid" exact component={TweetPage} />
             <Route path="/login" exact>
               {({ history }) => (
-                <LoginPage onLogin={this.handleLogin} history={history} /> // Elige pasarle sólo la prop history al children
+                <LoginPage history={history} /> // Elige pasarle sólo la prop history al children
               )}
             </Route>
             <Route path="/404" exact>
